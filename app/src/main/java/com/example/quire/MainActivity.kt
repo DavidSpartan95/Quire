@@ -10,11 +10,20 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavHostController
+import com.example.quire.dataBase.AppDatabase
+import com.example.quire.dataBase.User
+import com.example.quire.dataBase.UserRepository
 import com.example.quire.ui.theme.QuireTheme
+import kotlinx.coroutines.Dispatchers
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        lateinit var navController: NavHostController
         super.onCreate(savedInstanceState)
+        val db = AppDatabase.getInstance(applicationContext)
+        val userRepository = UserRepository(db, lifecycleScope)
         setContent {
             QuireTheme {
                 // A surface container using the 'background' color from the theme
@@ -22,6 +31,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
+                    userRepository.performDatabaseOperation(Dispatchers.IO){
+                        if (userRepository.getUserInfo().isEmpty()) {
+                            userRepository.addUser(User(notes = arrayOf()))
+                        }
+                    }
                     Greeting("Quire")
                 }
             }
