@@ -23,6 +23,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     Greeting("Quire")
+
+                    Text("Hallåå där Tiger")
                 }
             }
         }
