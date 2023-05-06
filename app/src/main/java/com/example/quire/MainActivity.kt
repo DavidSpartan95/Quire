@@ -12,9 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.quire.dataBase.AppDatabase
 import com.example.quire.dataBase.User
 import com.example.quire.dataBase.UserRepository
+import com.example.quire.screens.navGraph.SetupNavGraph
 import com.example.quire.ui.theme.QuireTheme
 import kotlinx.coroutines.Dispatchers
 
@@ -36,7 +38,8 @@ class MainActivity : ComponentActivity() {
                             userRepository.addUser(User(notes = arrayOf()))
                         }
                     }
-                    Greeting("Quire")
+                    navController = rememberNavController()
+                    SetupNavGraph(navController = navController, userRepository = userRepository)
                 }
             }
         }
