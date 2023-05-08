@@ -50,6 +50,7 @@ android {
 dependencies {
     //This is room database dependencies
     implementation "androidx.room:room-runtime:2.5.0"
+    implementation 'androidx.navigation:navigation-runtime-ktx:2.5.3'
     androidTestImplementation "androidx.room:room-testing:2.5.0"
     // To use Kotlin annotation processing tool (kapt)
     kapt "androidx.room:room-compiler:2.5.0"
