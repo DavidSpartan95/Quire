@@ -8,6 +8,6 @@ class Note(
     var date: String? = null,
     var favorite: Boolean = false,
     var tag: String,
-    var color: Color? = null
+    var color: Int = Color.YELLOW
 ) {
 }
