@@ -15,7 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.quire.R
-
+//TODO Delete
 @Composable
 fun Prototype(navController: NavController) {
     Column(Modifier.fillMaxWidth(),Arrangement.Top, Alignment.CenterHorizontally) {
