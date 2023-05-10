@@ -1,6 +1,7 @@
 package com.example.quire.ui.theme.components
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -31,10 +32,20 @@ fun NoteItem(
     cornerRadius: Dp = 10.dp,
     cutCornerRadius: Dp = 30.dp,
     onDeleteClick:() -> Unit,
+    onItemClick:() -> Unit,
+    navController: (String) -> Unit
 
 ) {
-    Box(modifier = modifier){
-        Canvas(modifier = Modifier.matchParentSize()){
+    Box(modifier = modifier
+        .clickable(
+            onClick = {
+                navController("note_screen/${note.title}")
+                onItemClick()
+            }
+        )){
+        Canvas(modifier = Modifier
+            .matchParentSize()
+            ){
             val clipPath = Path().apply {
                 lineTo(size.width - cutCornerRadius.toPx(), 0f)
                 lineTo(size.width, cutCornerRadius.toPx())
@@ -77,6 +88,7 @@ fun NoteItem(
                 overflow = TextOverflow.Ellipsis
             )
         }
+
         IconButton(onClick = onDeleteClick,
             modifier = Modifier.align(Alignment.BottomEnd)
         ) {
@@ -86,5 +98,7 @@ fun NoteItem(
                 tint = MaterialTheme.colors.onSurface
             )
         }
+
+
     }
 }

@@ -6,10 +6,7 @@ import com.example.quire.dataBase.UserRepository
 import com.example.quire.dataBase.note.Note
 import com.example.quire.ui.theme.components.NoteScreen
 import com.example.quire.utilities.addNewNote
-import com.example.quire.utilities.deleteNote
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Composable
 fun TaskScreen(navController: NavController, userRepository: UserRepository) {
@@ -31,12 +28,10 @@ fun TaskScreen(navController: NavController, userRepository: UserRepository) {
 
     notes?.let {
         NoteScreen(
+            navController,
             userRepository,notes = notes!!,
-            onAddClick = {addNewNote(userRepository) { update = true }},
-            update = { update = true }
-        )
-
-            //deleteNote(userRepository,0){ update = true }
+            onAddClick = {addNewNote(userRepository) { update = true }}
+        ) { update = true }
 
     }
 }
