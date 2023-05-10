@@ -33,11 +33,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    userRepository.performDatabaseOperation(Dispatchers.IO){
-                        if (userRepository.getUserInfo().isEmpty()) {
-                            userRepository.addUser(User(notes = arrayOf()))
-                        }
-                    }
+
                     navController = rememberNavController()
                     SetupNavGraph(navController = navController, userRepository = userRepository)
                 }
