@@ -18,7 +18,7 @@ fun HomeScreen(navController: NavController, userRepository: UserRepository) {
     ) {
 
         //Prototype(navController)
-        HomeScreenContent(navController = navController)
+        HomeScreenContent(navController = navController, userRepository = userRepository)
 
     }
 

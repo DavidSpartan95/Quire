@@ -7,7 +7,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,23 +18,39 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.quire.R
-
+import com.example.quire.dataBase.User
+import com.example.quire.dataBase.UserRepository
+import com.example.quire.dataBase.note.Note
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 val blueColor = Color(0xFF4ECCD3)
 val backgroundColor = Color(0xFFEEEEEE)
 
 @Composable
-fun HomeScreenContent(navController: NavController) {
+fun HomeScreenContent(navController: NavController,userRepository: UserRepository) {
+
+    var userExists: Boolean? by remember { mutableStateOf(null)}
+    var showAlert: Boolean  by remember { mutableStateOf(true)}
+
+    LaunchedEffect(true){
+        userRepository.performDatabaseOperation(Dispatchers.IO){
+            userExists = userRepository.getUserInfo().isNotEmpty()
+            println(userExists)
+        }
+    }
+
     Surface(color = backgroundColor) {
-        val context = LocalContext.current
-        //val hasSeenIntro = AppPreferences.hasSeenIntro(context)
 
-        //if (!hasSeenIntro) {
-        //if (hasSeenIntro) {
-
-          //  IntroductionDialog(onDismiss = { AppPreferences.setHasSeenIntro(context, true) })
-        //}
+       if(userExists != null){
+           if (!userExists!!){
+               if (showAlert){
+                   IntroductionDialog(){ showAlert = false }
+               }
+           }
+       }
 
         Column(
             modifier = Modifier
@@ -79,7 +95,22 @@ fun HomeScreenContent(navController: NavController) {
             Spacer(modifier = Modifier.height(55.dp))
 
             Button(
-                onClick = { navController.navigate("task_screen") },
+                onClick = {
+                    //This code will make a new user if there is no user in the database
+                    // Then it will navigate to homeScreen
+                    userRepository.performDatabaseOperation(Dispatchers.IO){
+                        if (userRepository.getUserInfo().isEmpty()) {
+                            userRepository.addUser(User(notes = arrayOf()))
+                            CoroutineScope(Dispatchers.Main).launch {
+                                navController.navigate("task_screen")
+                            }
+                        }else{
+                            CoroutineScope(Dispatchers.Main).launch {
+                                navController.navigate("task_screen")
+                            }
+                        }
+                    }
+                          },
                 colors = ButtonDefaults.buttonColors(backgroundColor = blueColor),
                 modifier = Modifier.width(320.dp)
             ) {
