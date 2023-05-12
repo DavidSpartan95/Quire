@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.quire.dataBase.UserRepository
+import com.example.quire.screens.FavoriteScreen
 import com.example.quire.screens.HomeScreen
 import com.example.quire.screens.TaskItemScreen
 import com.example.quire.screens.TaskScreen
@@ -31,6 +32,11 @@ fun SetupNavGraph(
             route = Screen.TaskItem.route
         ){
             TaskItemScreen(navController = navController, userRepository = userRepository)
+        }
+        composable(
+            route = Screen.FavoriteNotes.route
+        ){
+            FavoriteScreen(navController = navController, userRepository = userRepository)
         }
     }
 

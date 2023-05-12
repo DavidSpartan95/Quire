@@ -13,14 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
@@ -43,7 +36,9 @@ fun NoteScreen(
     userRepository: UserRepository,
     notes: Array<Note>,
     onAddClick:() -> Unit,
-    update:() -> Unit
+    update:() -> Unit,
+    //this parametar might be temporary
+    navToFav:() -> Unit,
 ) {
     val searchValue by remember {
         mutableStateOf("")
@@ -60,8 +55,9 @@ fun NoteScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(45.dp)
-                            .background(color = Color.White,
-                            shape = RoundedCornerShape(30.dp)
+                            .background(
+                                color = Color.White,
+                                shape = RoundedCornerShape(30.dp)
                             ),
                         placeholder = {
                             Text(text = "Search...",
@@ -88,6 +84,7 @@ fun NoteScreen(
                 }
             )
         }
+    
     ) {
         LazyColumn {
             itemsIndexed(notes) { index,note ->
@@ -97,11 +94,14 @@ fun NoteScreen(
                         .fillMaxWidth()
 
                 ) {
-                    NoteItem(note = note) {
-                            deleteNote(userRepository, index,mainTread = { update.invoke() })
-                    }
+                    NoteItem(note = note, userRepository = userRepository, i = index, update = update
+                        , onDeleteClick = {deleteNote(userRepository, index,mainTread = { update.invoke() })} )
                 }
             }
         }
+    }
+    Button(onClick = { navToFav.invoke() }) {
+        Text(text = "Favorite")
+        
     }
 }

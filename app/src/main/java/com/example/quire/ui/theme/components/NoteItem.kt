@@ -9,6 +9,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,16 +23,22 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
+import com.example.quire.dataBase.UserRepository
 import com.example.quire.dataBase.note.Note
+import com.example.quire.utilities.setFavorite
+import kotlinx.coroutines.Dispatchers
 
 
 @Composable
 fun NoteItem(
+    userRepository: UserRepository,
+    i: Int,
     note: Note,
     modifier: Modifier = Modifier,
     cornerRadius: Dp = 10.dp,
     cutCornerRadius: Dp = 30.dp,
     onDeleteClick:() -> Unit,
+    update:() -> Unit,
     //onItemClick:() -> Unit,
     //navController: (String) -> Unit
 
@@ -96,6 +103,22 @@ fun NoteItem(
                 overflow = TextOverflow.Ellipsis)
         }
 
+        IconButton(
+            modifier = Modifier.align(Alignment.TopEnd).padding(top = 20.dp),
+            onClick = {
+                setFavorite(userRepository = userRepository, index = i, mainTread = update)
+                println(note.favorite)
+            }
+        ) {
+            Icon(
+                imageVector = Icons.Default.FavoriteBorder,
+
+                contentDescription = "FavoriteButton",
+                tint = Color.Red
+
+
+            )
+        }
         IconButton(onClick = onDeleteClick,
             modifier = Modifier.align(Alignment.BottomEnd)
         ) {

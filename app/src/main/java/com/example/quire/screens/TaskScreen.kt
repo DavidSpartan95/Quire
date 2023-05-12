@@ -33,7 +33,8 @@ fun TaskScreen(navController: NavController, userRepository: UserRepository) {
         NoteScreen(
             userRepository,notes = notes!!,
             onAddClick = {navController.navigate("task_item_screen")},
-            update = { update = true }
+            update = { update = true },
+            navToFav = {navController.navigate("favorite_note_screen")}
         )
 
             //deleteNote(userRepository,0){ update = true }
