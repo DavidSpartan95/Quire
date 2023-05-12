@@ -75,7 +75,7 @@ fun NoteItem(
                 .padding(end = 32.dp)
         ) {
             Text(text = note.title,
-                style = MaterialTheme.typography.h4,
+                style = MaterialTheme.typography.h6,
                 color = MaterialTheme.colors.onSurface,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -87,6 +87,13 @@ fun NoteItem(
                 maxLines = 8,
                 overflow = TextOverflow.Ellipsis
             )
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(text = note.date!!,
+                style = MaterialTheme.typography.body2,
+                color = MaterialTheme.colors.onSurface,
+                maxLines = 8,
+                overflow = TextOverflow.Ellipsis)
         }
 
         IconButton(onClick = onDeleteClick,
