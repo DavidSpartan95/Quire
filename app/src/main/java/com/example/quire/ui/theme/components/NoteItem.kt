@@ -32,15 +32,15 @@ fun NoteItem(
     cornerRadius: Dp = 10.dp,
     cutCornerRadius: Dp = 30.dp,
     onDeleteClick:() -> Unit,
-    onItemClick:() -> Unit,
-    navController: (String) -> Unit
+    //onItemClick:() -> Unit,
+    //navController: (String) -> Unit
 
 ) {
     Box(modifier = modifier
         .clickable(
             onClick = {
-                navController("note_screen/${note.title}")
-                onItemClick()
+                //navController("note_screen/${note.title}")
+                //onItemClick()
             }
         )){
         Canvas(modifier = Modifier

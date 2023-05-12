@@ -6,10 +6,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-fun addNewNote(userRepository: UserRepository,mainTread:() -> Unit){
+fun addNewNote(title:String,content:String,userRepository: UserRepository,mainTread:() -> Unit){
     userRepository.performDatabaseOperation(Dispatchers.IO){
         try {
-            userRepository.addNote(Note("Test Title","1. Milk\n2. Bread\n3. Eggs", tag = "nothing important"))
+            userRepository.addNote(Note(title,content ,tag = "nothing important"))
             CoroutineScope(Dispatchers.Main).launch {
                 mainTread.invoke()
             }

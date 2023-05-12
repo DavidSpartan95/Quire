@@ -19,7 +19,7 @@ fun NoteScreen2(navController: NavController, userRepository: UserRepository) {
 	) {
 
 		//Prototype(navController)
-		NoteComp (navController = navController, note = Note(title = String(), content = String(), tag = String()))
+		NoteComp (navController = navController, note = Note(title = String(), content = String(), tag = String()),userRepository)
 
 	}
 
