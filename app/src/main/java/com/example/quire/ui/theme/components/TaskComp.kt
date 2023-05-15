@@ -3,38 +3,25 @@ package com.example.quire.ui.theme.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.quire.dataBase.UserRepository
 import com.example.quire.dataBase.note.Note
 import com.example.quire.utilities.deleteNote
+import java.util.*
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -45,41 +32,59 @@ fun NoteScreen(
     onAddClick:() -> Unit,
     update:() -> Unit
 ) {
-    val searchValue by remember {
+    var searchValue by remember {
         mutableStateOf("")
     }
+
+    val blueColor = Color(0xFF4ECCD3)
+    val backgroundColor = Color(0xFFEEEEEE)
+
+    val filteredNotes = notes.filter { note ->
+        note.title.contains(searchValue, ignoreCase = true) ||
+                note.content.contains(searchValue, ignoreCase = true)
+    }.toTypedArray()
+
+
     Scaffold(
-        backgroundColor = MaterialTheme.colors.background,
+        backgroundColor = backgroundColor,
         topBar = {
             TopAppBar(
-                backgroundColor = MaterialTheme.colors.background,
-              title = {
+                backgroundColor = backgroundColor,
+                title = {
                     TextField(
-                        value =searchValue ,
-                        onValueChange = {},
+                        value = searchValue,
+                        onValueChange = { newValue -> searchValue = newValue },
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .width(379.dp)
                             .height(45.dp)
-                            .background(color = Color.White,
-                            shape = RoundedCornerShape(30.dp)
+                            .background(
+                                color = Color.White,
+                                shape = RoundedCornerShape(30.dp)
                             ),
                         placeholder = {
-                            Text(text = "Search...",
-                                fontSize = 11.sp)},
+                            Text(
+                                text = "Search...",
+                                fontSize = 11.sp
+                            )
+                        },
+                        textStyle = TextStyle(fontSize = 13.sp),
                         trailingIcon = {
                             IconButton(onClick = { /*TODO*/ }) {
                                 Icon(
                                     imageVector = Icons.Default.Search,
-                                    contentDescription = "Search")
+                                    contentDescription = "Search"
+                                )
                             }
-                        }
-                        )
+                        },
+                        colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White)
+                    )
                 }
             )
         },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onAddClick,
+                backgroundColor = blueColor,
                 content = {
                     Icon(
                         Icons.Default.Add,
@@ -89,16 +94,25 @@ fun NoteScreen(
             )
         }
     ) {
-        LazyColumn {
-            itemsIndexed(notes) { index,note ->
-                Box(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth()
+        Column { // Wrap the LazyColumn with a Column composable
+            Text(
+                text = "Tasks List / Notes",
+                style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colors.onSurface,
+                modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 8.dp)
+            )
 
-                ) {
-                    NoteItem(note = note) {
-                            deleteNote(userRepository, index,mainTread = { update.invoke() })
+            LazyColumn {
+                itemsIndexed(filteredNotes) { index, note ->
+                    Box(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth()
+
+                    ) {
+                        NoteItem(note = note) {
+                            deleteNote(userRepository, index, mainTread = { update.invoke() })
+                        }
                     }
                 }
             }
