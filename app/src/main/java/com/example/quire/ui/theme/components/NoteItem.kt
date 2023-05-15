@@ -1,9 +1,14 @@
 package com.example.quire.ui.theme.components
 
+
 import androidx.compose.foundation.Canvas
+
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
+import com.example.quire.R
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -11,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -19,14 +25,19 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.clipPath
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+
 import androidx.core.graphics.ColorUtils
 import com.example.quire.dataBase.UserRepository
 import com.example.quire.dataBase.note.Note
 import com.example.quire.utilities.setFavorite
 import kotlinx.coroutines.Dispatchers
+
+import com.example.quire.dataBase.note.Note
+import kotlin.random.Random
 
 
 @Composable
@@ -42,17 +53,28 @@ fun NoteItem(
     //onItemClick:() -> Unit,
     //navController: (String) -> Unit
 
-) {
-    Box(modifier = modifier
-        .clickable(
-            onClick = {
-                //navController("note_screen/${note.title}")
-                //onItemClick()
-            }
-        )){
-        Canvas(modifier = Modifier
-            .matchParentSize()
-            ){
+
+    ) {
+
+    var isFavorite by remember { mutableStateOf(false) }
+    val blueColor = Color(0xFF4ECCD3)
+
+
+    /*fun randomColor(): Color {
+        val random = Random.Default
+        return Color(
+            red = random.nextFloat(),
+            green = random.nextFloat(),
+            blue = random.nextFloat(),
+            alpha = 1f
+        )
+    }
+     */
+
+    Box(modifier = modifier){
+
+        Canvas(modifier = Modifier.matchParentSize()){
+
             val clipPath = Path().apply {
                 lineTo(size.width - cutCornerRadius.toPx(), 0f)
                 lineTo(size.width, cutCornerRadius.toPx())
@@ -62,13 +84,13 @@ fun NoteItem(
             }
             clipPath(clipPath){
                 drawRoundRect(
-                    color = Color(note.color),
+                    color = Color.White,
                     size = size,
                     cornerRadius = CornerRadius(cornerRadius.toPx())
                 )
                 drawRoundRect(
-
-                    color = Color(ColorUtils.blendARGB(note.color, 0x000000, 0.2f)),
+                    color = blueColor,
+                    //color = randomColor(),
                     topLeft = Offset(size.width - cutCornerRadius.toPx(), -100f),
                     size = Size(cutCornerRadius.toPx() + 100f, cutCornerRadius.toPx() + 100f),
                     cornerRadius = CornerRadius(cornerRadius.toPx())
@@ -104,21 +126,25 @@ fun NoteItem(
         }
 
         IconButton(
-            modifier = Modifier.align(Alignment.TopEnd).padding(top = 20.dp),
-            onClick = {
-                setFavorite(userRepository = userRepository, index = i, mainTread = update)
+            onClick = { 
+              isFavorite = !isFavorite 
+              setFavorite(userRepository = userRepository, index = i, mainTread = update)
                 println(note.favorite)
-            }
+            },
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(top = 25.dp)
+
         ) {
-            Icon(
-                imageVector = Icons.Default.FavoriteBorder,
-
-                contentDescription = "FavoriteButton",
-                tint = Color.Red
-
-
+            Image(
+                painter = if (isFavorite) painterResource(id = R.drawable.baseline_favorite_24)
+                else painterResource(id = R.drawable.baseline_favorite_border_24),
+                contentDescription = "Favorite Icon",
+                modifier = Modifier.size(34.dp)
             )
         }
+
+
         IconButton(onClick = onDeleteClick,
             modifier = Modifier.align(Alignment.BottomEnd)
         ) {
