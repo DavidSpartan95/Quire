@@ -36,7 +36,6 @@ import com.example.quire.dataBase.note.Note
 import com.example.quire.utilities.setFavorite
 import kotlinx.coroutines.Dispatchers
 
-import com.example.quire.dataBase.note.Note
 import kotlin.random.Random
 
 
@@ -126,8 +125,7 @@ fun NoteItem(
         }
 
         IconButton(
-            onClick = { 
-              isFavorite = !isFavorite 
+            onClick = {
               setFavorite(userRepository = userRepository, index = i, mainTread = update)
                 println(note.favorite)
             },
@@ -137,7 +135,7 @@ fun NoteItem(
 
         ) {
             Image(
-                painter = if (isFavorite) painterResource(id = R.drawable.baseline_favorite_24)
+                painter = if (note.favorite) painterResource(id = R.drawable.baseline_favorite_24)
                 else painterResource(id = R.drawable.baseline_favorite_border_24),
                 contentDescription = "Favorite Icon",
                 modifier = Modifier.size(34.dp)

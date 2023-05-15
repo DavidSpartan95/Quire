@@ -99,7 +99,16 @@ fun NoteScreen(
                 }
             )
 
-        }, bottomBar = {NavBarComp(Modifier)}
+        }, bottomBar = {
+            NavBarComp(){
+                if (contentShown == "FavoriteScreen"){
+                    contentShown = "TaskScreen"
+                }else{
+                    contentShown = "FavoriteScreen"
+                }
+                update.invoke()
+            }
+        }
     ) {
         Column { // Wrap the LazyColumn with a Column composable
             Text(
@@ -108,8 +117,8 @@ fun NoteScreen(
                 color = MaterialTheme.colors.onSurface,
                 modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 8.dp)
             )
-            val result = when(contentShown){
-                "TaskScreen" -> LazyColumn {
+            when(contentShown){
+                "TaskScreen" -> {LazyColumn {
                     itemsIndexed(filteredNotes) { index, note ->
                         Box(
                             modifier = Modifier
@@ -117,14 +126,36 @@ fun NoteScreen(
                                 .fillMaxWidth()
 
 
-                ) {
-                    NoteItem(note = note, userRepository = userRepository, i = index, update = update
-                        , onDeleteClick = {deleteNote(userRepository, index,mainTread = { update.invoke() })} )
+                        ) {
+                            NoteItem(note = note, userRepository = userRepository, i = index, update = update
+                                , onDeleteClick = {deleteNote(userRepository, index,mainTread = { update.invoke() })} )
 
-                }
-                else -> ""
+                        } }
+
+
+                }}
+                "FavoriteScreen" -> {LazyColumn {
+                    itemsIndexed(filteredNotes) { index, note ->
+                        if (note.favorite){
+                            Box(
+                                modifier = Modifier
+                                    .padding(16.dp)
+                                    .fillMaxWidth()
+
+
+                            ) {
+                                NoteItem(note = note, userRepository = userRepository, i = index, update = update
+                                    , onDeleteClick = {deleteNote(userRepository, index,mainTread = { update.invoke() })} )
+
+                            }
+                        }
+                    }
+
+
+                }}
+                else -> {}
             }
-            result
+
 
         }
     }
