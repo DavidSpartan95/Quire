@@ -1,6 +1,7 @@
 package com.example.quire.ui.theme.components
 
 
+import NavBarComp
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -34,6 +35,9 @@ fun NoteScreen(
 ) {
     var searchValue by remember {
         mutableStateOf("")
+    }
+    var contentShown by remember {
+        mutableStateOf("TaskScreen")
     }
 
     val blueColor = Color(0xFF4ECCD3)
@@ -92,7 +96,7 @@ fun NoteScreen(
                     )
                 }
             )
-        }
+        }, bottomBar = {NavBarComp(Modifier)}
     ) {
         Column { // Wrap the LazyColumn with a Column composable
             Text(
@@ -101,21 +105,25 @@ fun NoteScreen(
                 color = MaterialTheme.colors.onSurface,
                 modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 8.dp)
             )
+            val result = when(contentShown){
+                "TaskScreen" -> LazyColumn {
+                    itemsIndexed(filteredNotes) { index, note ->
+                        Box(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxWidth()
 
-            LazyColumn {
-                itemsIndexed(filteredNotes) { index, note ->
-                    Box(
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .fillMaxWidth()
-
-                    ) {
-                        NoteItem(note = note) {
-                            deleteNote(userRepository, index, mainTread = { update.invoke() })
+                        ) {
+                            NoteItem(note = note) {
+                                deleteNote(userRepository, index, mainTread = { update.invoke() })
+                            }
                         }
                     }
                 }
+                else -> ""
             }
+            result
+
         }
     }
 }

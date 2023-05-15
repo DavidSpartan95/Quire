@@ -1,6 +1,8 @@
 package com.example.quire.screens
 
+import NavBarComp
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.quire.dataBase.UserRepository
 import com.example.quire.dataBase.note.Note
@@ -39,4 +41,5 @@ fun TaskScreen(navController: NavController, userRepository: UserRepository) {
             //deleteNote(userRepository,0){ update = true }
 
     }
+
 }
