@@ -2,7 +2,10 @@ package com.example.quire.ui.theme.components
 
 
 import androidx.compose.foundation.Canvas
+
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import com.example.quire.R
@@ -35,6 +38,9 @@ fun NoteItem(
     cornerRadius: Dp = 10.dp,
     cutCornerRadius: Dp = 30.dp,
     onDeleteClick:() -> Unit,
+    //onItemClick:() -> Unit,
+    //navController: (String) -> Unit
+
 
     ) {
 
@@ -56,6 +62,7 @@ fun NoteItem(
     Box(modifier = modifier){
 
         Canvas(modifier = Modifier.matchParentSize()){
+
             val clipPath = Path().apply {
                 lineTo(size.width - cutCornerRadius.toPx(), 0f)
                 lineTo(size.width, cutCornerRadius.toPx())
@@ -85,7 +92,7 @@ fun NoteItem(
                 .padding(end = 32.dp)
         ) {
             Text(text = note.title,
-                style = MaterialTheme.typography.h4,
+                style = MaterialTheme.typography.h6,
                 color = MaterialTheme.colors.onSurface,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -97,8 +104,14 @@ fun NoteItem(
                 maxLines = 8,
                 overflow = TextOverflow.Ellipsis
             )
-        }
+            Spacer(modifier = Modifier.height(12.dp))
 
+            Text(text = note.date!!,
+                style = MaterialTheme.typography.body2,
+                color = MaterialTheme.colors.onSurface,
+                maxLines = 8,
+                overflow = TextOverflow.Ellipsis)
+        }
 
         IconButton(
             onClick = { isFavorite = !isFavorite },
@@ -115,6 +128,7 @@ fun NoteItem(
             )
         }
 
+
         IconButton(onClick = onDeleteClick,
             modifier = Modifier.align(Alignment.BottomEnd)
         ) {
@@ -124,5 +138,7 @@ fun NoteItem(
                 tint = MaterialTheme.colors.onSurface
             )
         }
+
+
     }
 }

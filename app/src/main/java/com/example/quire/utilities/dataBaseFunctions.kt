@@ -1,15 +1,19 @@
 package com.example.quire.utilities
 
+import android.icu.util.Calendar
 import com.example.quire.dataBase.UserRepository
 import com.example.quire.dataBase.note.Note
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.DateFormat
 
-fun addNewNote(userRepository: UserRepository,mainTread:() -> Unit){
+fun addNewNote(title:String,content:String,userRepository: UserRepository,mainTread:() -> Unit){
+    val calendar = Calendar.getInstance().time
+    val date = DateFormat.getDateInstance().format(calendar)
     userRepository.performDatabaseOperation(Dispatchers.IO){
         try {
-            userRepository.addNote(Note("Test Title","1. Milk\n2. Bread\n3. Eggs", tag = "nothing important"))
+            userRepository.addNote(Note(title,content ,tag = "nothing important", date = date))
             CoroutineScope(Dispatchers.Main).launch {
                 mainTread.invoke()
             }
