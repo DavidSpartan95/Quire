@@ -20,6 +20,9 @@ coroutineScope : CoroutineScope ) {
     fun getUserInfo(): List<User> {
         return appDatabase.userDao().getAllUsers()
     }
+    fun changeFavoriteStatus(i: Int) {
+        appDatabase.userDao().changeFavorite(i)
+    }
 
 
     fun performDatabaseOperation (dispatcher: CoroutineDispatcher,

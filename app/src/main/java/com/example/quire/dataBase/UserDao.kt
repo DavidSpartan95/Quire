@@ -85,6 +85,7 @@ interface UserDao {
         val user = getUserByName() ?: return
         user.notes[index].favorite = !user.notes[index].favorite
 
+
         if (user.id == null) {
             // If the user doesn't have an ID assigned, insert a new row in the table.
             insertUser(user)

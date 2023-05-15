@@ -31,7 +31,9 @@ fun NoteScreen(
     userRepository: UserRepository,
     notes: Array<Note>,
     onAddClick:() -> Unit,
-    update:() -> Unit
+    update:() -> Unit,
+    //this parametar might be temporary
+    navToFav:() -> Unit,
 ) {
     var searchValue by remember {
         mutableStateOf("")
@@ -96,6 +98,7 @@ fun NoteScreen(
                     )
                 }
             )
+
         }, bottomBar = {NavBarComp(Modifier)}
     ) {
         Column { // Wrap the LazyColumn with a Column composable
@@ -113,12 +116,11 @@ fun NoteScreen(
                                 .padding(16.dp)
                                 .fillMaxWidth()
 
-                        ) {
-                            NoteItem(note = note) {
-                                deleteNote(userRepository, index, mainTread = { update.invoke() })
-                            }
-                        }
-                    }
+
+                ) {
+                    NoteItem(note = note, userRepository = userRepository, i = index, update = update
+                        , onDeleteClick = {deleteNote(userRepository, index,mainTread = { update.invoke() })} )
+
                 }
                 else -> ""
             }
@@ -126,4 +128,5 @@ fun NoteScreen(
 
         }
     }
+
 }

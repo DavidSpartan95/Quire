@@ -37,3 +37,14 @@ fun deleteNote(userRepository:UserRepository,index: Int,mainTread:() -> Unit){
         }
     }
 }
+
+fun setFavorite(userRepository:UserRepository,index: Int,mainTread:() -> Unit){
+    userRepository.performDatabaseOperation(Dispatchers.IO){
+
+        userRepository.changeFavoriteStatus(index)
+        CoroutineScope(Dispatchers.Main).launch {
+            mainTread.invoke()
+        }
+
+    }
+}
