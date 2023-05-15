@@ -1,6 +1,5 @@
 package com.example.quire.ui.theme.components
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -54,106 +53,72 @@ fun HomeScreenContent(navController: NavController, userRepository: UserReposito
             }
         }
 
-        Box(modifier = Modifier){
-            Image(
-                painter = painterResource(R.drawable.background),
-                contentDescription = "background",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.FillBounds
+        Image(
+            painter = painterResource(R.drawable.background),
+            contentDescription = "background",
+            contentScale = ContentScale.FillBounds
+        )
+
+        Image(
+            painter = painterResource(R.drawable.icon),
+            contentDescription = "icon",
+            contentScale = ContentScale.FillBounds
             )
-            Column(
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .wrapContentSize(Alignment.BottomCenter)
+        ) {
+
+            Text(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .wrapContentSize(Alignment.BottomCenter)
-            ) {
-                /*
-				val imageTop = painterResource(R.drawable.moln)
-				val imageMiddle = painterResource(R.drawable.icon)
-
-				Image(
-					painter = imageTop,
-					contentDescription = "Moln",
-					modifier = Modifier
-						.fillMaxWidth()
-						.height(178.dp)
-				)
-
-				Spacer(modifier = Modifier.height(20.dp))
-
-				Image(
-					painter = imageMiddle,
-					contentDescription = "Icon",
-					modifier = Modifier
-						.fillMaxWidth()
-						.height(280.dp)
-				)
-
-				Spacer(modifier = Modifier.height(30.dp))
-
-				Text(
-					text = "Quire",
-					color = blueColor,
-					fontWeight = FontWeight.Bold,
-					fontSize = 45.sp
-				)
-
-				Spacer(modifier = Modifier.height(25.dp))
-
-				Text(text = "Make notes with Quire app",
-					fontWeight = FontWeight.Bold)
-
-				Spacer(modifier = Modifier.height(55.dp))
-				*/
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(bottom = 10.dp),
-                    text = "Quire",
-                    color = blueColor,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 45.sp
-
-                )
-
-                Text(modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 80.dp),
-                    text = "Make notes with Quire app",
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                    .padding(bottom = 10.dp),
+                text = "Quire",
+                color = blueColor,
+                fontWeight = FontWeight.Bold,
+                fontSize = 30.sp
 
+            )
 
-                Button(
-                    onClick = {
-                        //This code will make a new user if there is no user in the database
-                        // Then it will navigate to homeScreen
-                        userRepository.performDatabaseOperation(Dispatchers.IO){
-                            if (userRepository.getUserInfo().isEmpty()) {
-                                userRepository.addUser(User(notes = arrayOf()))
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    navController.navigate("task_screen")
-                                }
-                            }else{
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    navController.navigate("task_screen")
-                                }
+            Text(modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(bottom = 60.dp),
+                text = "Make notes with Quire app",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Button(
+                onClick = {
+                    //This code will make a new user if there is no user in the database
+                    // Then it will navigate to homeScreen
+                    userRepository.performDatabaseOperation(Dispatchers.IO){
+                        if (userRepository.getUserInfo().isEmpty()) {
+                            userRepository.addUser(User(notes = arrayOf()))
+                            CoroutineScope(Dispatchers.Main).launch {
+                                navController.navigate("task_screen")
+                            }
+                        }else{
+                            CoroutineScope(Dispatchers.Main).launch {
+                                navController.navigate("task_screen")
                             }
                         }
-                    },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = blueColor),
-                    modifier = Modifier
-                        .width(320.dp)
-                        .padding(bottom = 80.dp)
-                ) {
-                    Text(
-                        text = "Get started",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
-                    )
-                }
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = blueColor),
+                modifier = Modifier
+                    .fillMaxWidth(0.9f)
+                    .padding(bottom = 80.dp)
+                    .align(Alignment.CenterHorizontally)
+            ) {
+                Text(
+                    text = "Get started",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
             }
         }
-
     }
 }
