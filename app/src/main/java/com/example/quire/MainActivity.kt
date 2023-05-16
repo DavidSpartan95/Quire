@@ -6,19 +6,14 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.quire.dataBase.AppDatabase
-import com.example.quire.dataBase.User
 import com.example.quire.dataBase.UserRepository
 import com.example.quire.screens.navGraph.SetupNavGraph
 import com.example.quire.ui.theme.QuireTheme
-import kotlinx.coroutines.Dispatchers
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,21 +34,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-    Text(text = "Aleksandra!")
-    Text(text = "Hello World!")
-    Text(text = "Benny!ghfh")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    QuireTheme {
-        Greeting("Android")
     }
 }

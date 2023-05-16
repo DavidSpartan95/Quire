@@ -1,11 +1,8 @@
-package com.example.quire.ui.theme.components
+package com.example.quire.ui.theme.components.notes
 
 
 import androidx.compose.foundation.Canvas
-
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import com.example.quire.R
@@ -14,9 +11,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -29,14 +24,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-
-import androidx.core.graphics.ColorUtils
 import com.example.quire.dataBase.UserRepository
 import com.example.quire.dataBase.note.Note
+import com.example.quire.ui.theme.blueColor
 import com.example.quire.utilities.setFavorite
-import kotlinx.coroutines.Dispatchers
-
-import kotlin.random.Random
 
 
 @Composable
@@ -49,26 +40,10 @@ fun NoteItem(
     cutCornerRadius: Dp = 30.dp,
     onDeleteClick:() -> Unit,
     update:() -> Unit,
-    //onItemClick:() -> Unit,
-    //navController: (String) -> Unit
 
 
     ) {
 
-    var isFavorite by remember { mutableStateOf(false) }
-    val blueColor = Color(0xFF4ECCD3)
-
-
-    /*fun randomColor(): Color {
-        val random = Random.Default
-        return Color(
-            red = random.nextFloat(),
-            green = random.nextFloat(),
-            blue = random.nextFloat(),
-            alpha = 1f
-        )
-    }
-     */
 
     Box(modifier = modifier){
 
@@ -89,7 +64,6 @@ fun NoteItem(
                 )
                 drawRoundRect(
                     color = blueColor,
-                    //color = randomColor(),
                     topLeft = Offset(size.width - cutCornerRadius.toPx(), -100f),
                     size = Size(cutCornerRadius.toPx() + 100f, cutCornerRadius.toPx() + 100f),
                     cornerRadius = CornerRadius(cornerRadius.toPx())

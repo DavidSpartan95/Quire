@@ -4,6 +4,7 @@ package com.example.quire.ui.theme.components
 import NavBarComp
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -21,6 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.quire.dataBase.UserRepository
 import com.example.quire.dataBase.note.Note
+import com.example.quire.ui.theme.backgroundColor
+import com.example.quire.ui.theme.blueColor
+import com.example.quire.ui.theme.components.notes.NoteItem
 import com.example.quire.utilities.deleteNote
 import java.util.*
 
@@ -32,8 +36,7 @@ fun NoteScreen(
     notes: Array<Note>,
     onAddClick:() -> Unit,
     update:() -> Unit,
-    //this parametar might be temporary
-    navToFav:() -> Unit,
+
 ) {
     var searchValue by remember {
         mutableStateOf("")
@@ -42,8 +45,6 @@ fun NoteScreen(
         mutableStateOf("TaskScreen")
     }
 
-    val blueColor = Color(0xFF4ECCD3)
-    val backgroundColor = Color(0xFFEEEEEE)
 
     val filteredNotes = notes.filter { note ->
         note.title.contains(searchValue, ignoreCase = true) ||
@@ -127,7 +128,7 @@ fun NoteScreen(
                         Box(
                             modifier = Modifier
                                 .padding(16.dp)
-                                .fillMaxWidth()
+                                .fillMaxWidth().clickable { println("ClickClick") }
 
 
                         ) {
@@ -144,7 +145,7 @@ fun NoteScreen(
                             Box(
                                 modifier = Modifier
                                     .padding(16.dp)
-                                    .fillMaxWidth()
+                                    .fillMaxWidth().clickable { println("ClickClick") }
 
 
                             ) {
