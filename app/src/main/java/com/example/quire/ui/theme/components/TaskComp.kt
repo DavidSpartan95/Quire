@@ -115,7 +115,7 @@ fun NoteScreen(
             )
         }
     ) {
-        Column { // Wrap the LazyColumn with a Column composable
+        Column(modifier = Modifier.padding(bottom = 130.dp)){ // Wrap the LazyColumn with a Column composable
             Text(
                 text = "Tasks List / Notes",
                 style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Bold),
