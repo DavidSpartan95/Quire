@@ -11,7 +11,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.example.quire.dataBase.UserRepository
 import com.example.quire.dataBase.note.Note
 import com.example.quire.ui.theme.blueColor
+import com.example.quire.ui.theme.components.DeleteNoteAlertDialog
 import com.example.quire.utilities.setFavorite
 
 
@@ -40,10 +41,10 @@ fun NoteItem(
     cutCornerRadius: Dp = 30.dp,
     onDeleteClick:() -> Unit,
     update:() -> Unit,
-
-
     ) {
 
+    var showDialog by remember { mutableStateOf(false) }
+    DeleteNoteAlertDialog(showDialog, { showDialog = it }, onDeleteClick)
 
     Box(modifier = modifier){
 
@@ -105,19 +106,19 @@ fun NoteItem(
             },
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(top = 25.dp)
+                .padding(top = 30.dp)
 
         ) {
             Image(
                 painter = if (note.favorite) painterResource(id = R.drawable.baseline_favorite_24)
                 else painterResource(id = R.drawable.baseline_favorite_border_24),
                 contentDescription = "Favorite Icon",
-                modifier = Modifier.size(34.dp)
+                modifier = Modifier.size(24.dp)
             )
         }
 
 
-        IconButton(onClick = onDeleteClick,
+        IconButton(onClick = { showDialog = true },
             modifier = Modifier.align(Alignment.BottomEnd)
         ) {
             Icon(

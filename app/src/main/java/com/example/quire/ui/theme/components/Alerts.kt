@@ -3,6 +3,7 @@ package com.example.quire.ui.theme.components
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 
 @Composable
@@ -19,4 +20,33 @@ fun IntroductionDialog(onDismiss: () -> Unit) {
             }
         }
     )
+}
+
+
+@Composable
+fun DeleteNoteAlertDialog(
+    showDialog: Boolean,
+    setShowDialog: (Boolean) -> Unit,
+    onDeleteClick: () -> Unit
+) {
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { setShowDialog(false) },
+            title = { Text("Delete") },
+            text = { Text("Are you sure you want to delete this note?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    onDeleteClick()
+                    setShowDialog(false)
+                }) {
+                    Text("Yes")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { setShowDialog(false) }) {
+                    Text("No")
+                }
+            }
+        )
+    }
 }

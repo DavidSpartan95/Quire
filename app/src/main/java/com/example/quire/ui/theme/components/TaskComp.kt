@@ -62,7 +62,7 @@ fun NoteScreen(
                         value = searchValue,
                         onValueChange = { newValue -> searchValue = newValue },
                         modifier = Modifier
-                            .width(379.dp)
+                            .fillMaxWidth()
                             .height(45.dp)
                             .background(
                                 color = Color.White,
