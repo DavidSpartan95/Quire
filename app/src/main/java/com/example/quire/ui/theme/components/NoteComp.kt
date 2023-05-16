@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -43,9 +44,12 @@ fun NoteComp(navController: NavController, note: Note, userRepository: UserRepos
 					IconButton(onClick = { navController.popBackStack() }) {
 						Icon(Icons.Default.ArrowBack, contentDescription = "Back")
 					}
-				}
+				},
+				backgroundColor = Color(0,205,212,),
+				contentColor = Color.White
 			)
-		}
+		},
+
 	) {
 		Surface(color = backgroundColor) {
 			EditNote(userRepository)

@@ -100,14 +100,18 @@ fun NoteScreen(
             )
 
         }, bottomBar = {
-            NavBarComp(){
-                if (contentShown == "FavoriteScreen"){
+            NavBarComp(
+                task = {
                     contentShown = "TaskScreen"
-                }else{
+                    update.invoke()
+                       },
+                favorite = {
                     contentShown = "FavoriteScreen"
-                }
-                update.invoke()
-            }
+                    update.invoke()
+                           },
+                folder = {}
+
+            )
         }
     ) {
         Column { // Wrap the LazyColumn with a Column composable

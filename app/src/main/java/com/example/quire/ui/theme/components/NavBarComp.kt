@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 
 @Composable
-fun NavBarComp(navigate:() -> Unit) {
+fun NavBarComp(task:() -> Unit,favorite:() -> Unit,folder:() -> Unit ) {
 	Box() {
 		BottomNavigation(
 			modifier = Modifier.fillMaxWidth()
@@ -21,21 +21,21 @@ fun NavBarComp(navigate:() -> Unit) {
 			backgroundColor = Color.White
 		) {
 			BottomNavigationItem(
-				onClick = { navigate.invoke() },
+				onClick = { task.invoke() },
 				selected = false,
 				icon = { Icon(Icons.Filled.Home, contentDescription = "Button 1") },
 				label = { Text("Button 1") }
 			)
 
 			BottomNavigationItem(
-				onClick = { navigate.invoke() },
+				onClick = { favorite.invoke() },
 				selected = false,
 				icon = { Icon(Icons.Default.Favorite, contentDescription = "Favorite") },
 				label = { Text("Favorite") }
 			)
 
 			BottomNavigationItem(
-				onClick = { navigate.invoke() },
+				onClick = { folder.invoke() },
 				selected = false,
 				icon = { Icon(Icons.Filled.Person, contentDescription = "Button 3") },
 				label = { Text("Button 3") }
