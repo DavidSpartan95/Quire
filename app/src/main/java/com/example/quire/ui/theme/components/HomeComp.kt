@@ -97,7 +97,7 @@ fun HomeScreenContent(navController: NavController, userRepository: UserReposito
                     // Then it will navigate to homeScreen
                     userRepository.performDatabaseOperation(Dispatchers.IO){
                         if (userRepository.getUserInfo().isEmpty()) {
-                            userRepository.addUser(User(notes = arrayOf()))
+                            userRepository.addUser(User(notes = arrayOf(), folders = arrayOf()))
                             CoroutineScope(Dispatchers.Main).launch {
                                 navController.navigate("task_screen")
                             }
