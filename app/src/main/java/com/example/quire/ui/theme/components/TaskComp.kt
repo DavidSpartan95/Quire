@@ -62,7 +62,7 @@ fun NoteScreen(
                         value = searchValue,
                         onValueChange = { newValue -> searchValue = newValue },
                         modifier = Modifier
-                            .width(379.dp)
+                            .fillMaxWidth()
                             .height(45.dp)
                             .background(
                                 color = Color.White,
@@ -115,7 +115,7 @@ fun NoteScreen(
             )
         }
     ) {
-        Column { // Wrap the LazyColumn with a Column composable
+        Column(modifier = Modifier.padding(bottom = 130.dp)){ // Wrap the LazyColumn with a Column composable
             Text(
                 text = "Tasks List / Notes",
                 style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Bold),

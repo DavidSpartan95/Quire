@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.quire.dataBase.UserRepository
 import com.example.quire.ui.theme.backgroundColor
+import com.example.quire.ui.theme.blueColor
 import com.example.quire.utilities.addNewNote
 
 
@@ -77,11 +78,13 @@ fun EditNote(userRepository: UserRepository, popBack: ()-> Unit) {
 			OutlinedTextField(
 				value = titel,
 				onValueChange = {titel = it},
-				label = {Text("Titel", color = Color(0xFF4ECCD3)) },
+				label = {Text("Titel", color = blueColor) },
 				colors = TextFieldDefaults
 					.outlinedTextFieldColors(
-						focusedBorderColor = Color(0xFF4ECCD3),
-						unfocusedBorderColor = Color(0xFF4ECCD3)),
+						focusedBorderColor = blueColor,
+						unfocusedBorderColor = blueColor,
+						backgroundColor = Color.White
+					),
 
 				modifier = Modifier
 					.fillMaxWidth())
@@ -90,19 +93,23 @@ fun EditNote(userRepository: UserRepository, popBack: ()-> Unit) {
 
 			OutlinedTextField(value = content,
 				onValueChange = {content = it},
-				label = {Text("Your note:", color = Color(0xFF4ECCD3)) },
+				label = {Text("Your note:", color = blueColor) },
 				colors = TextFieldDefaults
 					.outlinedTextFieldColors(
-						focusedBorderColor = Color(0xFF4ECCD3),
-						unfocusedBorderColor = Color(0xFF4ECCD3)),
+						focusedBorderColor = blueColor,
+						unfocusedBorderColor = blueColor,
+						backgroundColor = Color.White
+					),
 				modifier = Modifier
 					.fillMaxWidth()
 					.height(200.dp))
 
+			Spacer(modifier = Modifier.height(15.dp))
 
+			// Save the note
 			Button(modifier = Modifier
 				.align(Alignment.End),
-				colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF4ECCD3)),
+				colors = ButtonDefaults.buttonColors(backgroundColor = blueColor),
 				onClick = {
 					if (titel.isNotEmpty() && content.isNotEmpty()) {
 
@@ -111,8 +118,6 @@ fun EditNote(userRepository: UserRepository, popBack: ()-> Unit) {
 							popBack.invoke()
 
 						}
-
-						// Save the note
 					} else {
 						showToast("The fields can not be empty!")
 					}
