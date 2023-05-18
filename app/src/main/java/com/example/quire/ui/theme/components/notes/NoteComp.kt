@@ -76,8 +76,11 @@ fun EditNote(userRepository: UserRepository, popBack: ()-> Unit) {
 			Spacer(modifier = Modifier.height(15.dp))
 
 			OutlinedTextField(
-				value = titel,
-				onValueChange = {titel = it},
+				value = titel.take(20),
+				onValueChange = {newValue ->
+					if (newValue.length <= 20) {
+						titel = newValue}
+				},
 				label = {Text("Titel", color = blueColor) },
 				colors = TextFieldDefaults
 					.outlinedTextFieldColors(

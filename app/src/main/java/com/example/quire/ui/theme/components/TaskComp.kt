@@ -51,6 +51,9 @@ fun NoteScreen(
                 note.content.contains(searchValue, ignoreCase = true)
     }.toTypedArray()
 
+    // Reverse the order of notes
+    val reversedNotes = filteredNotes.reversedArray()
+
 
     Scaffold(
         backgroundColor = backgroundColor,
@@ -124,7 +127,7 @@ fun NoteScreen(
             )
             when(contentShown){
                 "TaskScreen" -> {LazyColumn {
-                    itemsIndexed(filteredNotes) { index, note ->
+                    itemsIndexed(reversedNotes) { index, note ->
                         Box(
                             modifier = Modifier
                                 .padding(16.dp)
@@ -132,15 +135,20 @@ fun NoteScreen(
 
 
                         ) {
-                            NoteItem(note = note, userRepository = userRepository, i = index, update = update
-                                , onDeleteClick = {deleteNote(userRepository, index,mainTread = { update.invoke() })} )
+                            NoteItem(
+                                note = note,
+                                userRepository = userRepository,
+                                i = filteredNotes.size - index - 1,
+                                update = update,
+                                onDeleteClick = { deleteNote(userRepository, index, mainTread = { update.invoke() }) }
+                            )
 
                         } }
 
 
                 }}
                 "FavoriteScreen" -> {LazyColumn {
-                    itemsIndexed(filteredNotes) { index, note ->
+                    itemsIndexed(reversedNotes) { index, note ->
                         if (note.favorite){
                             Box(
                                 modifier = Modifier
@@ -149,8 +157,14 @@ fun NoteScreen(
 
 
                             ) {
-                                NoteItem(note = note, userRepository = userRepository, i = index, update = update
-                                    , onDeleteClick = {deleteNote(userRepository, index,mainTread = { update.invoke() })} )
+                                val favoriteIndex = filteredNotes.indexOf(note)
+                                NoteItem(
+                                    note = note,
+                                    userRepository = userRepository,
+                                    i = favoriteIndex,
+                                    update = update,
+                                    onDeleteClick = { deleteNote(userRepository, favoriteIndex, mainTread = { update.invoke() }) }
+                                )
 
                             }
                         }
