@@ -36,7 +36,7 @@ fun NavBarComp(task: () -> Unit, favorite: () -> Unit, folder: () -> Unit) {
 				},
 				selected = selectedTabIndex == 0,
 				icon = {
-					val iconTint = if (selectedTabIndex == 0) blueColor else Color.Black
+					val iconTint = if (selectedTabIndex == 0) blueColor else Color.Gray
 					Icon(
 						painter = painterResource(id = R.drawable.icon_notes),
 						contentDescription = "Notes",
@@ -48,7 +48,7 @@ fun NavBarComp(task: () -> Unit, favorite: () -> Unit, folder: () -> Unit) {
 				label = {
 					Text(
 						text = "Notes",
-						color = if (selectedTabIndex == 0) blueColor else Color.Black
+						color = if (selectedTabIndex == 0) blueColor else Color.Gray
 					)
 				}
 			)
@@ -63,13 +63,13 @@ fun NavBarComp(task: () -> Unit, favorite: () -> Unit, folder: () -> Unit) {
 					Icon(
 						Icons.Filled.Favorite,
 						contentDescription = "Favorites",
-						tint = if (selectedTabIndex == 1) blueColor else Color.Black
+						tint = if (selectedTabIndex == 1) blueColor else Color.Gray
 					)
 				},
 				label = {
 					Text(
 						text = "Favorites",
-						color = if (selectedTabIndex == 1) blueColor else Color.Black
+						color = if (selectedTabIndex == 1) blueColor else Color.Gray
 					)
 				}
 			)
@@ -81,7 +81,7 @@ fun NavBarComp(task: () -> Unit, favorite: () -> Unit, folder: () -> Unit) {
 				},
 				selected = selectedTabIndex == 2,
 				icon = {
-					val iconTint = if (selectedTabIndex == 2) blueColor else Color.Black
+					val iconTint = if (selectedTabIndex == 2) blueColor else Color.Gray
 					Icon(
 						painter = painterResource(id = R.drawable.icon_folder),
 						contentDescription = "Folders",
@@ -92,7 +92,7 @@ fun NavBarComp(task: () -> Unit, favorite: () -> Unit, folder: () -> Unit) {
 				label = {
 					Text(
 						text = "Folders",
-						color = if (selectedTabIndex == 2) blueColor else Color.Black
+						color = if (selectedTabIndex == 2) blueColor else Color.Gray
 					)
 				}
 			)

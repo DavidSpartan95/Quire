@@ -51,6 +51,8 @@ fun NoteScreen(
                 note.content.contains(searchValue, ignoreCase = true)
     }.toTypedArray()
 
+    val reversedNotes = filteredNotes.reversed().toTypedArray()
+
 
     Scaffold(
         backgroundColor = backgroundColor,
@@ -124,7 +126,7 @@ fun NoteScreen(
             )
             when(contentShown){
                 "TaskScreen" -> {LazyColumn {
-                    itemsIndexed(filteredNotes) { index, note ->
+                    itemsIndexed(reversedNotes) { index, note ->
                         Box(
                             modifier = Modifier
                                 .padding(16.dp)
@@ -140,7 +142,7 @@ fun NoteScreen(
 
                 }}
                 "FavoriteScreen" -> {LazyColumn {
-                    itemsIndexed(filteredNotes) { index, note ->
+                    itemsIndexed(reversedNotes) { index, note ->
                         if (note.favorite){
                             Box(
                                 modifier = Modifier
