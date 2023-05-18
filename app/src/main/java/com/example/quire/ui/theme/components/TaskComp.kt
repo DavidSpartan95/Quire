@@ -20,18 +20,21 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.quire.dataBase.UserRepository
 import com.example.quire.dataBase.note.Note
 import com.example.quire.ui.theme.backgroundColor
 import com.example.quire.ui.theme.blueColor
 import com.example.quire.ui.theme.components.notes.NoteItem
 import com.example.quire.utilities.deleteNote
+import com.google.gson.Gson
 import java.util.*
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun NoteScreen(
+    navController: NavController,
     userRepository: UserRepository,
     notes: Array<Note>,
     onAddClick:() -> Unit,
@@ -128,7 +131,10 @@ fun NoteScreen(
                         Box(
                             modifier = Modifier
                                 .padding(16.dp)
-                                .fillMaxWidth().clickable { println("ClickClick") }
+                                .fillMaxWidth().clickable {
+                                    val noteJson = Gson().toJson(note)
+                                    navController.navigate("task_item_screen/$noteJson/$index")
+                                }
 
 
                         ) {
@@ -145,7 +151,7 @@ fun NoteScreen(
                             Box(
                                 modifier = Modifier
                                     .padding(16.dp)
-                                    .fillMaxWidth().clickable { println("ClickClick") }
+                                    .fillMaxWidth().clickable { onAddClick.invoke() }
 
 
                             ) {
