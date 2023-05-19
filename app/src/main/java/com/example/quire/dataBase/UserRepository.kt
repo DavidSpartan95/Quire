@@ -24,7 +24,10 @@ coroutineScope : CoroutineScope ) {
         appDatabase.userDao().changeFavorite(i)
     }
 
-
+    fun edditExiatingNote(i: Int, content:String,title:String){
+        appDatabase.userDao().changeContent(content,i)
+        appDatabase.userDao().changeTitle(title,i)
+    }
     fun performDatabaseOperation (dispatcher: CoroutineDispatcher,
                                   databaseOperation : suspend () -> Unit) {
         coroutineScope .launch(dispatcher) {

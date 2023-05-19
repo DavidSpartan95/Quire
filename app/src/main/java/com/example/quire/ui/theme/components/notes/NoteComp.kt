@@ -14,14 +14,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.quire.dataBase.UserRepository
+import com.example.quire.dataBase.note.Note
 import com.example.quire.ui.theme.backgroundColor
 import com.example.quire.ui.theme.blueColor
 import com.example.quire.utilities.addNewNote
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun NoteComp(navController: NavController, userRepository: UserRepository) {
+fun NoteComp(navController: NavController, userRepository: UserRepository, specificNote: Note? = null, noteIndex: Int?= null) {
 
 	Scaffold(
 		topBar = {
@@ -40,23 +44,40 @@ fun NoteComp(navController: NavController, userRepository: UserRepository) {
 	) {
 		Surface(color = backgroundColor) {
 
+			if(noteIndex != null && specificNote != null){
+				EditNote(userRepository, noteIndex  = noteIndex, specificNote = specificNote){
+					navController.popBackStack()
+				}
+			}else {
+				EditNote(userRepository) {
+					navController.popBackStack()
+				}
 
-			EditNote(userRepository){
-				navController.popBackStack()
 			}
-
-
 		}
 	}
 }
 
 @Composable
-fun EditNote(userRepository: UserRepository, popBack: ()-> Unit) {
-	var titel by remember {
-		mutableStateOf("")
+fun EditNote(userRepository: UserRepository,specificNote: Note? = null, noteIndex: Int?= null , popBack: ()-> Unit) {
+
+	var title by remember {
+		//check if the note that is being clicked is not empty and fetch the specific note value to the title
+		if (specificNote != null){
+
+			mutableStateOf(specificNote.title)
+		}else{
+			mutableStateOf("")
+		}
+
 	}
 	var content by remember {
-		mutableStateOf("")
+		if(specificNote != null){
+			mutableStateOf(specificNote.content)
+		}else{
+			mutableStateOf("")
+		}
+
 	}
 
 	val context = LocalContext.current  // Access the context
@@ -114,13 +135,23 @@ fun EditNote(userRepository: UserRepository, popBack: ()-> Unit) {
 				.align(Alignment.End),
 				colors = ButtonDefaults.buttonColors(backgroundColor = blueColor),
 				onClick = {
-					if (titel.isNotEmpty() && content.isNotEmpty()) {
+					if (title.isNotEmpty() && content.isNotEmpty()) {
+						if (specificNote != null && noteIndex != null){
+							userRepository.performDatabaseOperation(Dispatchers.IO){
+								userRepository.edditExiatingNote(noteIndex,content,title)
+								CoroutineScope(Dispatchers.Main).launch {
+									showToast("Note changed")
+									popBack.invoke()
+								}
+							}
+						}else{
+							addNewNote(title,content,userRepository){
+								showToast("Note saved")
+								popBack.invoke()
 
-						addNewNote(titel,content,userRepository){
-							showToast("Note saved")
-							popBack.invoke()
-
+							}
 						}
+
 					} else {
 						showToast("The fields can not be empty!")
 					}
