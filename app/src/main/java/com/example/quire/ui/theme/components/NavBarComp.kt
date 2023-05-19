@@ -73,7 +73,7 @@ fun NavBarComp(task: () -> Unit, favorite: () -> Unit, folder: () -> Unit) {
 			BottomNavigationItem(
 				onClick = {
 					selectedTabIndex = 2
-					task.invoke()
+					folder.invoke()
 				},
 				selected = selectedTabIndex == 2,
 				icon = {
@@ -88,6 +88,7 @@ fun NavBarComp(task: () -> Unit, favorite: () -> Unit, folder: () -> Unit) {
 				label = {
 					Text(
 						text = "Folders",
+
 						color = if (selectedTabIndex == 2) blueColor else Color.Gray
 					)
 				}

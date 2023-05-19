@@ -7,7 +7,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -112,7 +116,10 @@ fun NoteScreen(
                     contentShown = "FavoriteScreen"
                     update.invoke()
                            },
-                folder = {}
+                folder = {
+                    contentShown = "FolderScreen"
+                    update.invoke()
+                }
 
             )
         }
@@ -123,6 +130,7 @@ fun NoteScreen(
                 text = when (contentShown) {
                     "TaskScreen" -> "Notes"
                     "FavoriteScreen" -> "Favorites"
+                    "FolderScreen" -> "Folder"
                     else -> ""
                 },
               
@@ -136,7 +144,8 @@ fun NoteScreen(
                         Box(
                             modifier = Modifier
                                 .padding(16.dp)
-                                .fillMaxWidth().clickable {
+                                .fillMaxWidth()
+                                .clickable {
                                     val noteJson = Gson().toJson(note)
                                     navController.navigate("task_item_screen/$noteJson/$index")
                                 }
@@ -164,7 +173,8 @@ fun NoteScreen(
                             Box(
                                 modifier = Modifier
                                     .padding(16.dp)
-                                    .fillMaxWidth().clickable { onAddClick.invoke() }
+                                    .fillMaxWidth()
+                                    .clickable { onAddClick.invoke() }
 
 
                             ) {
@@ -186,6 +196,19 @@ fun NoteScreen(
 
 
                 }}
+                "FolderScreen" -> {
+                    LazyVerticalGrid(columns =  GridCells.Fixed(2),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ){
+                        items(notes.size){
+                            note ->
+                            Box(Modifier.size(150.dp).background(Color.Green).padding(16.dp)) {
+                                Text(text = notes[note].title)
+                            }
+                        }
+                    }
+                }
                 else -> {}
             }
 
