@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.quire.dataBase.UserRepository
+import com.example.quire.dataBase.folder.Folder
 import com.example.quire.dataBase.note.Note
 import com.example.quire.ui.theme.backgroundColor
 import com.example.quire.ui.theme.blueColor
@@ -41,6 +42,7 @@ fun NoteScreen(
     navController: NavController,
     userRepository: UserRepository,
     notes: Array<Note>,
+    folders: Array<Folder>,
     onAddClick:() -> Unit,
     update:() -> Unit,
 
@@ -96,7 +98,13 @@ fun NoteScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = onAddClick,
+                onClick = {
+                    if (contentShown == "FolderScreen"){
+                        navController.navigate("folder_screen")
+                    }else{
+                        onAddClick.invoke()
+                    }
+                          },
                 backgroundColor = blueColor,
                 content = {
                     Icon(
@@ -201,10 +209,10 @@ fun NoteScreen(
                         horizontalArrangement = Arrangement.spacedBy(16.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ){
-                        items(notes.size){
-                            note ->
+                        items(folders.size){
+                            folder ->
                             Box(Modifier.size(150.dp).background(Color.Green).padding(16.dp)) {
-                                Text(text = notes[note].title)
+                                Text(text = folders[folder].name)
                             }
                         }
                     }

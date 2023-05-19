@@ -5,5 +5,6 @@ sealed class Screen(val route: String){
     object Tasks:Screen(route = "task_screen")
     object TaskItem:Screen(route = "task_item_screen/{specificNote}/{noteIndex}")
     object NewTaskItem: Screen(route = "task_item_screen")
+    object Folder:Screen(route = "folder_screen")
 
 }

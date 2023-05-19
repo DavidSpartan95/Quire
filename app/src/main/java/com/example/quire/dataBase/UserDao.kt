@@ -7,10 +7,8 @@ import com.example.quire.dataBase.note.Note
 
 @Dao
 interface UserDao {
-
     @Insert
     fun insertUser(user: User)
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun updateExistingUser(user: User)
 
