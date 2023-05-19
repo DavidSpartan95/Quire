@@ -57,7 +57,7 @@ fun SetupNavGraph(
         composable(
             route = Screen.Folder.route
         ){
-            FolderScreen(userRepository = userRepository)
+            FolderScreen(userRepository = userRepository, navController = navController)
         }
     }
 }
