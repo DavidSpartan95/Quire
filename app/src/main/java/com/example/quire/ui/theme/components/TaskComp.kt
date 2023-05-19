@@ -20,18 +20,21 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.quire.dataBase.UserRepository
 import com.example.quire.dataBase.note.Note
 import com.example.quire.ui.theme.backgroundColor
 import com.example.quire.ui.theme.blueColor
 import com.example.quire.ui.theme.components.notes.NoteItem
 import com.example.quire.utilities.deleteNote
+import com.google.gson.Gson
 import java.util.*
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun NoteScreen(
+    navController: NavController,
     userRepository: UserRepository,
     notes: Array<Note>,
     onAddClick:() -> Unit,
@@ -50,7 +53,6 @@ fun NoteScreen(
         note.title.contains(searchValue, ignoreCase = true) ||
                 note.content.contains(searchValue, ignoreCase = true)
     }.toTypedArray()
-
 
     Scaffold(
         backgroundColor = backgroundColor,
@@ -117,40 +119,66 @@ fun NoteScreen(
     ) {
         Column(modifier = Modifier.padding(bottom = 130.dp)){ // Wrap the LazyColumn with a Column composable
             Text(
-                text = "Notes",
+
+                text = when (contentShown) {
+                    "TaskScreen" -> "Notes"
+                    "FavoriteScreen" -> "Favorites"
+                    else -> ""
+                },
+              
                 style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colors.onSurface,
                 modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 8.dp)
             )
             when(contentShown){
                 "TaskScreen" -> {LazyColumn {
-                    itemsIndexed(filteredNotes) { index, note ->
+                    itemsIndexed(filteredNotes.reversed()) { index, note ->
                         Box(
                             modifier = Modifier
                                 .padding(16.dp)
-                                .fillMaxWidth().clickable { println("ClickClick") }
+                                .fillMaxWidth().clickable {
+                                    val noteJson = Gson().toJson(note)
+                                    navController.navigate("task_item_screen/$noteJson/$index")
+                                }
 
 
                         ) {
-                            NoteItem(note = note, userRepository = userRepository, i = index, update = update
-                                , onDeleteClick = {deleteNote(userRepository, index,mainTread = { update.invoke() })} )
+                            NoteItem(
+                                note = note,
+                                userRepository = userRepository,
+                                i = filteredNotes.size - index - 1,
+                                update = update,
+                                onDeleteClick = { deleteNote(
+                                    userRepository,
+                                    filteredNotes.size - index - 1,
+                                    mainTread = { update.invoke() }) }
+                            )
 
                         } }
 
 
                 }}
                 "FavoriteScreen" -> {LazyColumn {
-                    itemsIndexed(filteredNotes) { index, note ->
+                    itemsIndexed(filteredNotes.reversed()) { index, note ->
                         if (note.favorite){
                             Box(
                                 modifier = Modifier
                                     .padding(16.dp)
-                                    .fillMaxWidth().clickable { println("ClickClick") }
+                                    .fillMaxWidth().clickable { onAddClick.invoke() }
 
 
                             ) {
-                                NoteItem(note = note, userRepository = userRepository, i = index, update = update
-                                    , onDeleteClick = {deleteNote(userRepository, index,mainTread = { update.invoke() })} )
+                                val favoriteIndex = filteredNotes.indexOf(note)
+                                NoteItem(
+                                    note = note,
+                                    userRepository = userRepository,
+                                    i = favoriteIndex,
+                                    update = update,
+                                    onDeleteClick = { deleteNote(
+                                        userRepository,
+                                        favoriteIndex,
+                                        mainTread = { update.invoke() }) }
+                                )
 
                             }
                         }

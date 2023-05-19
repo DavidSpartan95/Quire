@@ -27,6 +27,7 @@ fun TaskScreen(navController: NavController, userRepository: UserRepository) {
 
     notes?.let {
         NoteScreen(
+            navController = navController,
             userRepository,notes = notes!!,
             onAddClick = {navController.navigate("task_item_screen")},
             update = { update = true },
