@@ -87,6 +87,25 @@ interface UserDao {
         }
     }
     @Transaction
+    //Eddit later
+    fun removeNoteToFolderAtIndex(folderIndex: Int, note: Note) {
+        val user = getUserByName() ?: return
+        val folders = user.folders
+
+        if (folderIndex >= 0 && folderIndex < folders.size) {
+            val folder = folders[folderIndex]
+            folder.noteArray += note
+        }
+
+        if (user.id == null) {
+            // If the user doesn't have an ID assigned, insert a new row in the table.
+            insertUser(user)
+        } else {
+            // If the user already has an ID assigned, update the existing row in the table.
+            updateExistingUser(user)
+        }
+    }
+    @Transaction
     fun changeTitle(newTitle: String, index: Int) {
         val user = getUserByName() ?: return
         user.notes[index].title = newTitle
@@ -127,7 +146,6 @@ interface UserDao {
         val user = getUserByName() ?: return
         user.notes[index].favorite = !user.notes[index].favorite
 
-
         if (user.id == null) {
             // If the user doesn't have an ID assigned, insert a new row in the table.
             insertUser(user)
@@ -136,6 +154,5 @@ interface UserDao {
             updateExistingUser(user)
         }
     }
-
 
 }
