@@ -1,5 +1,6 @@
 package com.example.quire.dataBase
 
+import com.example.quire.dataBase.folder.Folder
 import com.example.quire.dataBase.note.Note
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -24,9 +25,18 @@ coroutineScope : CoroutineScope ) {
         appDatabase.userDao().changeFavorite(i)
     }
 
-    fun edditExiatingNote(i: Int, content:String,title:String){
+    fun editExitingNote(i: Int, content:String, title:String){
         appDatabase.userDao().changeContent(content,i)
         appDatabase.userDao().changeTitle(title,i)
+    }
+    fun addNoteToFolder(folderIndex: Int, note: Note){
+        appDatabase.userDao().addNoteToFolderAtIndex(folderIndex,note)
+    }
+    fun addFolder(folder: Folder){
+        appDatabase.userDao().addFolderToUser(folder)
+    }
+    fun removeFolder(folderIndex: Int){
+        appDatabase.userDao().removeFolderAtIndex(folderIndex)
     }
     fun performDatabaseOperation (dispatcher: CoroutineDispatcher,
                                   databaseOperation : suspend () -> Unit) {

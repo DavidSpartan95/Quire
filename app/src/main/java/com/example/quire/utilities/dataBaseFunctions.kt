@@ -2,6 +2,7 @@ package com.example.quire.utilities
 
 import android.icu.util.Calendar
 import com.example.quire.dataBase.UserRepository
+import com.example.quire.dataBase.folder.Folder
 import com.example.quire.dataBase.note.Note
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -46,5 +47,34 @@ fun setFavorite(userRepository:UserRepository,index: Int,mainTread:() -> Unit){
             mainTread.invoke()
         }
 
+    }
+}
+
+fun addFolder(userRepository: UserRepository, folder:Folder,mainTread: () -> Unit?){
+    userRepository.performDatabaseOperation(Dispatchers.IO){
+
+        userRepository.addFolder(folder)
+        CoroutineScope(Dispatchers.Main).launch {
+            mainTread.invoke()
+        }
+    }
+}
+
+fun removeFolder(userRepository: UserRepository, folderIndex:Int,mainTread: () -> Unit?){
+    userRepository.performDatabaseOperation(Dispatchers.IO){
+
+        userRepository.removeFolder(folderIndex)
+        CoroutineScope(Dispatchers.Main).launch {
+            mainTread.invoke()
+        }
+    }
+}
+fun addNoteToFolder(userRepository: UserRepository, folderIndex:Int, note: Note,mainTread: () -> Unit?){
+    userRepository.performDatabaseOperation(Dispatchers.IO){
+
+        userRepository.addNoteToFolder(folderIndex, note)
+        CoroutineScope(Dispatchers.Main).launch {
+            mainTread.invoke()
+        }
     }
 }
