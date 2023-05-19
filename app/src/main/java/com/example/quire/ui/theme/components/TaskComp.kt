@@ -51,7 +51,6 @@ fun NoteScreen(
                 note.content.contains(searchValue, ignoreCase = true)
     }.toTypedArray()
 
-
     Scaffold(
         backgroundColor = backgroundColor,
         topBar = {
@@ -117,14 +116,18 @@ fun NoteScreen(
     ) {
         Column(modifier = Modifier.padding(bottom = 130.dp)){ // Wrap the LazyColumn with a Column composable
             Text(
-                text = "Tasks List / Notes",
+                text = when (contentShown) {
+                    "TaskScreen" -> "Notes"
+                    "FavoriteScreen" -> "Favorites"
+                    else -> ""
+                },
                 style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colors.onSurface,
                 modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 8.dp)
             )
             when(contentShown){
                 "TaskScreen" -> {LazyColumn {
-                    itemsIndexed(filteredNotes) { index, note ->
+                    itemsIndexed(filteredNotes.reversed()) { index, note ->
                         Box(
                             modifier = Modifier
                                 .padding(16.dp)
@@ -132,15 +135,23 @@ fun NoteScreen(
 
 
                         ) {
-                            NoteItem(note = note, userRepository = userRepository, i = index, update = update
-                                , onDeleteClick = {deleteNote(userRepository, index,mainTread = { update.invoke() })} )
+                            NoteItem(
+                                note = note,
+                                userRepository = userRepository,
+                                i = filteredNotes.size - index - 1,
+                                update = update,
+                                onDeleteClick = { deleteNote(
+                                    userRepository,
+                                    filteredNotes.size - index - 1,
+                                    mainTread = { update.invoke() }) }
+                            )
 
                         } }
 
 
                 }}
                 "FavoriteScreen" -> {LazyColumn {
-                    itemsIndexed(filteredNotes) { index, note ->
+                    itemsIndexed(filteredNotes.reversed()) { index, note ->
                         if (note.favorite){
                             Box(
                                 modifier = Modifier
@@ -149,8 +160,17 @@ fun NoteScreen(
 
 
                             ) {
-                                NoteItem(note = note, userRepository = userRepository, i = index, update = update
-                                    , onDeleteClick = {deleteNote(userRepository, index,mainTread = { update.invoke() })} )
+                                val favoriteIndex = filteredNotes.indexOf(note)
+                                NoteItem(
+                                    note = note,
+                                    userRepository = userRepository,
+                                    i = favoriteIndex,
+                                    update = update,
+                                    onDeleteClick = { deleteNote(
+                                        userRepository,
+                                        favoriteIndex,
+                                        mainTread = { update.invoke() }) }
+                                )
 
                             }
                         }
