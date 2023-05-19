@@ -12,8 +12,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.quire.dataBase.UserRepository
+import com.example.quire.dataBase.folder.Folder
 import com.example.quire.ui.theme.backgroundColor
 import com.example.quire.ui.theme.blueColor
+import com.example.quire.utilities.addFolder
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -63,7 +65,9 @@ fun FolderScreen(userRepository: UserRepository, navController: NavController) {
             Button(modifier = Modifier
                 .align(Alignment.End),
                 colors = ButtonDefaults.buttonColors(backgroundColor = blueColor),
-                onClick = {}
+                onClick = {
+                    addFolder(userRepository,Folder(folderName, arrayOf()), mainTread = {navController.popBackStack()})
+                }
             ) {
                 Text( text = "Save")
             }

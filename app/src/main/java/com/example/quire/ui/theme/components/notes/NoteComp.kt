@@ -2,18 +2,24 @@ package com.example.quire.ui.theme.components.notes
 
 import android.annotation.SuppressLint
 import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.quire.R
 import com.example.quire.dataBase.UserRepository
+import com.example.quire.dataBase.folder.Folder
 import com.example.quire.dataBase.note.Note
 import com.example.quire.ui.theme.backgroundColor
 import com.example.quire.ui.theme.blueColor
@@ -25,7 +31,7 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun NoteComp(navController: NavController, userRepository: UserRepository, specificNote: Note? = null, noteIndex: Int?= null) {
+fun NoteComp(navController: NavController, userRepository: UserRepository, specificNote: Note? = null, noteIndex: Int?= null, folders: Array<Folder>? = null) {
 
 	Scaffold(
 		topBar = {
@@ -45,7 +51,7 @@ fun NoteComp(navController: NavController, userRepository: UserRepository, speci
 		Surface(color = backgroundColor) {
 
 			if(noteIndex != null && specificNote != null){
-				EditNote(userRepository, noteIndex  = noteIndex, specificNote = specificNote){
+				EditNote(userRepository, noteIndex  = noteIndex, specificNote = specificNote, folders = folders){
 					navController.popBackStack()
 				}
 			}else {
@@ -59,8 +65,12 @@ fun NoteComp(navController: NavController, userRepository: UserRepository, speci
 }
 
 @Composable
-fun EditNote(userRepository: UserRepository,specificNote: Note? = null, noteIndex: Int?= null , popBack: ()-> Unit) {
+fun EditNote(userRepository: UserRepository,specificNote: Note? = null, noteIndex: Int?= null,folders:Array<Folder>? = null ,popBack: ()-> Unit,) {
 
+	var folders by remember{ mutableStateOf(folders) }
+	var expand by remember {
+		mutableStateOf(false)
+	}
 	var title by remember {
 		//check if the note that is being clicked is not empty and fetch the specific note value to the title
 		if (specificNote != null){
@@ -86,11 +96,12 @@ fun EditNote(userRepository: UserRepository,specificNote: Note? = null, noteInde
 		Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 	}
 
-	Box(modifier = Modifier){
-		Column(modifier = Modifier
-			.fillMaxSize()
-			.align(Alignment.Center)
-			.padding(15.dp)
+	Box(modifier = Modifier) {
+		Column(
+			modifier = Modifier
+				.fillMaxSize()
+				.align(Alignment.Center)
+				.padding(15.dp)
 
 		) {
 
@@ -98,11 +109,12 @@ fun EditNote(userRepository: UserRepository,specificNote: Note? = null, noteInde
 
 			OutlinedTextField(
 				value = title.take(20),
-				onValueChange = {newValue ->
+				onValueChange = { newValue ->
 					if (newValue.length <= 20) {
-						title = newValue}
+						title = newValue
+					}
 				},
-				label = {Text("Titel", color = blueColor) },
+				label = { Text("Titel", color = blueColor) },
 				colors = TextFieldDefaults
 					.outlinedTextFieldColors(
 						focusedBorderColor = blueColor,
@@ -111,13 +123,15 @@ fun EditNote(userRepository: UserRepository,specificNote: Note? = null, noteInde
 					),
 
 				modifier = Modifier
-					.fillMaxWidth())
+					.fillMaxWidth()
+			)
 
 			Spacer(modifier = Modifier.height(10.dp))
 
-			OutlinedTextField(value = content,
-				onValueChange = {content = it},
-				label = {Text("Your note:", color = blueColor) },
+			OutlinedTextField(
+				value = content,
+				onValueChange = { content = it },
+				label = { Text("Your note:", color = blueColor) },
 				colors = TextFieldDefaults
 					.outlinedTextFieldColors(
 						focusedBorderColor = blueColor,
@@ -126,7 +140,8 @@ fun EditNote(userRepository: UserRepository,specificNote: Note? = null, noteInde
 					),
 				modifier = Modifier
 					.fillMaxWidth()
-					.height(200.dp))
+					.height(200.dp)
+			)
 
 			Spacer(modifier = Modifier.height(15.dp))
 
@@ -136,16 +151,16 @@ fun EditNote(userRepository: UserRepository,specificNote: Note? = null, noteInde
 				colors = ButtonDefaults.buttonColors(backgroundColor = blueColor),
 				onClick = {
 					if (title.isNotEmpty() && content.isNotEmpty()) {
-						if (specificNote != null && noteIndex != null){
-							userRepository.performDatabaseOperation(Dispatchers.IO){
-								userRepository.edditExiatingNote(noteIndex,content,title)
+						if (specificNote != null && noteIndex != null) {
+							userRepository.performDatabaseOperation(Dispatchers.IO) {
+								userRepository.editExitingNote(noteIndex, content, title)
 								CoroutineScope(Dispatchers.Main).launch {
 									showToast("Note changed")
 									popBack.invoke()
 								}
 							}
-						}else{
-							addNewNote(title,content,userRepository){
+						} else {
+							addNewNote(title, content, userRepository) {
 								showToast("Note saved")
 								popBack.invoke()
 
@@ -157,10 +172,32 @@ fun EditNote(userRepository: UserRepository,specificNote: Note? = null, noteInde
 					}
 				}
 			) {
-				Text( text = "Save")
+				Text(text = "Save")
 			}
+			Box {
+				IconButton(onClick = { expand = true }) {
+					Icon(
+						painter = painterResource(id = R.drawable.icon_folder),
+						contentDescription = "Folder",
+						tint = blueColor,
+						modifier = Modifier.size(26.dp)
+					)
+				}
+				DropdownMenu(
+					expanded = expand,
+					onDismissRequest = { expand = false }
+				) {
+					folders?.let {
+						for (x in folders!!) {
+							Text(x.name, fontSize=18.sp, modifier = Modifier
+								.padding(10.dp)
+								.clickable(onClick = {}))
+
+						}
+					}
+					}
+				}
+			}
+
 		}
-
 	}
-
-}

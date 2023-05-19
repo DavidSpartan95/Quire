@@ -50,7 +50,7 @@ fun setFavorite(userRepository:UserRepository,index: Int,mainTread:() -> Unit){
     }
 }
 
-fun addFolder(userRepository: UserRepository, folder:Folder,mainTread: () -> Unit?){
+fun addFolder(userRepository: UserRepository, folder:Folder,mainTread: () -> Unit){
     userRepository.performDatabaseOperation(Dispatchers.IO){
 
         userRepository.addFolder(folder)

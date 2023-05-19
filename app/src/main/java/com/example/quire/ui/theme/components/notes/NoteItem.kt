@@ -50,7 +50,9 @@ fun NoteItem(
     ) {
 
     var showDialog by remember { mutableStateOf(false) }
-    DeleteNoteAlertDialog(showDialog, { showDialog = it }, onDeleteClick)
+    DeleteNoteAlertDialog(showDialog, { showDialog = it }, onDeleteClick = {
+
+    })
 
     Box(modifier = modifier){
 
