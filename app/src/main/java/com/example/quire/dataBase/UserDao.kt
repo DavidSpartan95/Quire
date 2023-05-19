@@ -1,6 +1,7 @@
 package com.example.quire.dataBase
 
 import androidx.room.*
+import com.example.quire.dataBase.folder.Folder
 import com.example.quire.dataBase.note.Note
 
 
@@ -36,6 +37,49 @@ interface UserDao {
     fun removeNoteAtIndex(index: Int) {
         val user = getUserByName() ?: return
         user.notes = user.notes.filterIndexed { i, _ -> i != index }.toTypedArray()
+        if (user.id == null) {
+            // If the user doesn't have an ID assigned, insert a new row in the table.
+            insertUser(user)
+        } else {
+            // If the user already has an ID assigned, update the existing row in the table.
+            updateExistingUser(user)
+        }
+    }
+    @Transaction
+    fun addFolderToUser(folder: Folder){
+        val user = getUserByName() ?: return
+        user.folders += folder
+
+        if (user.id == null) {
+            // If the user doesn't have an ID assigned, insert a new row in the table.
+            insertUser(user)
+        } else {
+            // If the user already has an ID assigned, update the existing row in the table.
+            updateExistingUser(user)
+        }
+    }
+    @Transaction
+    fun removeFolderAtIndex(index: Int) {
+        val user = getUserByName() ?: return
+        user.folders = user.folders.filterIndexed { i, _ -> i != index }.toTypedArray()
+        if (user.id == null) {
+            // If the user doesn't have an ID assigned, insert a new row in the table.
+            insertUser(user)
+        } else {
+            // If the user already has an ID assigned, update the existing row in the table.
+            updateExistingUser(user)
+        }
+    }
+    @Transaction
+    fun addNoteToFolderAtIndex(folderIndex: Int, note: Note) {
+        val user = getUserByName() ?: return
+        val folders = user.folders
+
+        if (folderIndex >= 0 && folderIndex < folders.size) {
+            val folder = folders[folderIndex]
+            folder.noteArray += note
+        }
+
         if (user.id == null) {
             // If the user doesn't have an ID assigned, insert a new row in the table.
             insertUser(user)

@@ -1,15 +1,13 @@
 package com.example.quire.dataBase
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
+import androidx.room.*
+import com.example.quire.dataBase.folder.FolderArrayTypeConverter
 import com.example.quire.dataBase.note.NoteArrayTypeConverter
 
 
 @Database(entities = [User::class], version = 1 )
-@TypeConverters(NoteArrayTypeConverter::class)
+@TypeConverters(NoteArrayTypeConverter::class,FolderArrayTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     companion object {
