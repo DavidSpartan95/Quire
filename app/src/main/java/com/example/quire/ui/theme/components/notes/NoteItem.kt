@@ -21,9 +21,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.quire.dataBase.UserRepository
 import com.example.quire.dataBase.note.Note
 import com.example.quire.ui.theme.blueColor
@@ -92,11 +98,17 @@ fun NoteItem(
             )
             Spacer(modifier = Modifier.height(12.dp))
 
-            Text(text = note.date!!,
-                style = MaterialTheme.typography.body2,
-                color = MaterialTheme.colors.onSurface,
-                maxLines = 8,
-                overflow = TextOverflow.Ellipsis)
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, fontSize = 15.sp)) {
+                        append(note.date!!)
+                    }
+                },
+                style = MaterialTheme.typography.body1,
+                color = Color.Black,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         }
 
         IconButton(
@@ -105,15 +117,15 @@ fun NoteItem(
                 println(note.favorite)
             },
             modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(top = 30.dp)
+                .align(Alignment.BottomEnd)
+                .padding(end = 75.dp)
 
         ) {
             Image(
                 painter = if (note.favorite) painterResource(id = R.drawable.baseline_favorite_24)
                 else painterResource(id = R.drawable.baseline_favorite_border_24),
                 contentDescription = "Favorite Icon",
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(32.dp)
             )
         }
 
@@ -124,7 +136,8 @@ fun NoteItem(
             Icon(
                 imageVector = Icons.Default.Delete,
                 contentDescription = "Delete note.",
-                tint = MaterialTheme.colors.onSurface
+                tint = MaterialTheme.colors.onSurface,
+                modifier = Modifier.size(32.dp)
             )
         }
 
