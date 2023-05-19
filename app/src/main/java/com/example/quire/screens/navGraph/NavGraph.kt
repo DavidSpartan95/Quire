@@ -32,6 +32,11 @@ fun SetupNavGraph(
             TaskScreen(navController = navController, userRepository = userRepository)
         }
         composable(
+            route = Screen.NewTaskItem.route
+        ){
+            TaskItemScreen(navController = navController, userRepository = userRepository)
+        }
+        composable(
             route = Screen.TaskItem.route,
             arguments = listOf(navArgument("specificNote") {
                 type = NavType.StringType
